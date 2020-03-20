@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+</head>
+<body>
+        {% extends 'base.html' %}
+        {% block content %}
+        <h1>Module List</h1>
+        <ul>
+                {% for module in all_module_list%}
+                <li>{{module}}</li>
+                {% endfor%}
+        </ul>
+        {% endblock content %}
+</body>
+</html>
