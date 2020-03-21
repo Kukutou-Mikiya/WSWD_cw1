@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.views.generic import ListView
-from .models import Module
+from .models import Module,Professor,Rating
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ModuleSerializer
@@ -24,3 +24,17 @@ class ModuleList(APIView):
         def post(self):
                 pass
 
+class ProfessorList(APIView):
+        def get(self,request):
+                professor1=Professor.objects.all()
+                for professor in professor1:
+                        rates = Rating.objects.filter(professor=professor)
+                        sum=0
+                        for rate in rates:
+                                sum+=rate.rating
+                        sum=sum/len(rates)
+                serializer= ModuleSerializer(professor1,many=True)
+                return Response(serializer.data)
+
+        def post(self):
+                pass
