@@ -5,7 +5,7 @@ from django.views.generic import ListView
 from .models import Module,Professor,Rating
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ModuleSerializer
+from .serializers import ModuleSerializer,ProfessorSerializer
 # Create your views here.
 def GetModule(request):
         return HttpResponse("hello hello")
@@ -27,13 +27,20 @@ class ModuleList(APIView):
 class ProfessorList(APIView):
         def get(self,request):
                 professor1=Professor.objects.all()
+                c=0
                 for professor in professor1:
                         rates = Rating.objects.filter(professor=professor)
                         sum=0
                         for rate in rates:
                                 sum+=rate.rating
-                        sum=sum/len(rates)
-                serializer= ModuleSerializer(professor1,many=True)
+                        if sum!=0:
+                                sum=sum/len(rates)
+                        if c==0:
+                                print(professor)
+                                c+=1
+                serializer= ProfessorSerializer(professor1,many=True)
+                #rua=serializer.data
+                #rua['rating']=
                 return Response(serializer.data)
 
         def post(self):

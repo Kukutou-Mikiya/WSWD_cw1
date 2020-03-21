@@ -6,4 +6,6 @@ if input[0]== 'list':
         response = requests.get("http://127.0.0.1:8000/module")
         #serializer = serializer.ModuleSerializer(response.text)
         print(response.text)
-#elif input[0]== 'list':
+elif input[0]== 'view':
+        response = requests.get("http://127.0.0.1:8000/view")
+        print(response.text)
