@@ -26,22 +26,24 @@ class ModuleList(APIView):
 
 class ProfessorList(APIView):
         def get(self,request):
-                professor1=Professor.objects.all()
-                c=0
-                for professor in professor1:
+                rateList=[]
+                professors=Professor.objects.all()
+                for professor in professors:
+                        data = {'name':professor.name}
+                        data['id']=professor.professor_id
                         rates = Rating.objects.filter(professor=professor)
                         sum=0
-                        for rate in rates:
-                                sum+=rate.rating
-                        if sum!=0:
-                                sum=sum/len(rates)
-                        if c==0:
-                                print(professor)
-                                c+=1
-                serializer= ProfessorSerializer(professor1,many=True)
+                        if rates.count()!=0:
+                                for rate in rates:
+                                        sum+=rate.rating
+                                average = sum/len(rates)
+                        else:
+                                average = 0
+                        data['rating'] = average
+                        rateList.append(data)
                 #rua=serializer.data
                 #rua['rating']=
-                return Response(serializer.data)
+                return Response(rateList)
 
         def post(self):
                 pass
