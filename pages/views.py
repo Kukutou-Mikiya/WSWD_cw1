@@ -26,6 +26,8 @@ class ModuleList(APIView):
 
 class ProfessorList(APIView):
         def get(self,request):
+                #headers=request.data
+                print(request.GET)
                 rateList=[]
                 professors=Professor.objects.all()
                 for professor in professors:
@@ -36,7 +38,7 @@ class ProfessorList(APIView):
                         if rates.count()!=0:
                                 for rate in rates:
                                         sum+=rate.rating
-                                average = sum/len(rates)
+                                average = round(sum/len(rates))
                         else:
                                 average = 0
                         data['rating'] = average
@@ -47,3 +49,29 @@ class ProfessorList(APIView):
 
         def post(self):
                 pass
+
+class SpecificRating(APIView):
+        def get(self,request):
+                a=request.GET.dict()
+                #professor_id=request.GET.get('professor_id')
+                #module_id=request.GET.get('module_id')
+                professor_id=a['professor_id']
+                module_id=a['module_id']
+                professor=Professor.objects.filter(professor_id=professor_id)
+                module=Module.objects.filter(module_id=module_id)
+                rates = Rating.objects.filter(professor=professor[0],module=module[0])
+                sum=0
+                if rates.count()!=0:
+                        for rate in rates:
+                                sum+=rate.rating
+                        average = round(sum/len(rates))
+                else:
+                        average = 0
+                data = {'rating':average}
+                return Response([data])
+                pass
+
+        def post(self):
+                pass
+
+
