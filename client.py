@@ -19,3 +19,10 @@ elif input[0]== 'average':
         headers['module_id']=input[2]        
         response = requests.get("http://127.0.0.1:8000/average", params = headers)
         print(response.text)
+elif input[0]== 'rate':
+        params={'professor_id':input[1]}
+        params['module_id']=input[2]
+        params['year']=input[3]
+        params['semester']=input[4]
+        params['rating']=input[5]
+        response = requests.get("http://127.0.0.1:8000/rate", params = params)

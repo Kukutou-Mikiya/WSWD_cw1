@@ -74,4 +74,17 @@ class SpecificRating(APIView):
         def post(self):
                 pass
 
+class RateProfessor(APIView):
+        def get(self,request):
+                professor_id=request.GET['professor_id']
+                module_id=request.GET['module_id']
+                rating = request.GET['rating']
+                semester = request.GET['semester']
+                year = request.GET['year']
+                module=Module.objects.filter(module_id=module_id,semester=semester,year=year)
+                professor=Professor.objects.filter(professor_id=professor_id)
+                Rating.objects.create(module=module[0],professor=professor[0],rating=rating)
+                return Response()
 
+        def post(self,request):
+                pass
