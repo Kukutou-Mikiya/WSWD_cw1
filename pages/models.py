@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+#from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class Professor(models.Model):
         professor_id = models.CharField(primary_key=True,unique=True,max_length=20)
@@ -22,7 +22,8 @@ class Rating(models.Model):
         professor = models.ForeignKey(Professor,on_delete=models.CASCADE)
         module = models.ForeignKey(Module,on_delete=models.CASCADE)
         rating = models.IntegerField()
-
+'''
 class CustomUser(AbstractUser):
         email= models.CharField(max_length=20)
+'''
 
