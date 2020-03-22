@@ -6,7 +6,15 @@ from .models import Module,Professor,Rating
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ModuleSerializer,ProfessorSerializer
+from django.contrib import auth
+from django.contrib.auth.models import User
 # Create your views here.
+def Register(request):
+        username=request.GET['username']
+        email=request.GET['email']
+        password=request.GET['password']
+        user=User.objects.create_user(username=username,email=email,password=password)
+
 def GetModule(request):
         return HttpResponse("hello hello")
 
