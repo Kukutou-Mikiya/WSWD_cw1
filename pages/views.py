@@ -22,8 +22,12 @@ def Login(request):
         user = auth.authenticate(username=username,password=password)
         if user:
                 auth.login(request,user)
+                return HttpResponse('success login')
         else:
-                pass
+                return HttpResponse('failed login')
+
+def Logout(request):
+        auth.logout(request)
 
 def GetModule(request):
         return HttpResponse("hello hello")
@@ -35,7 +39,6 @@ class HomePageView(ListView):
 
 
 class ModuleList(APIView):
-        @login_required
         def get(self,request):
                 module1=Module.objects.all()
                 serializer= ModuleSerializer(module1,many=True)
@@ -89,11 +92,11 @@ class SpecificRating(APIView):
                         average = 0
                 data = {'rating':average}
                 return Response([data])
-                pass
 
         def post(self):
                 pass
 
+'''
 class RateProfessor(APIView):
         def get(self,request):
                 professor_id=request.GET['professor_id']
@@ -108,3 +111,17 @@ class RateProfessor(APIView):
 
         def post(self,request):
                 pass
+
+'''
+
+@login_required
+def RateProfessor(request):
+        professor_id=request.GET['professor_id']
+        module_id=request.GET['module_id']
+        rating = request.GET['rating']
+        semester = request.GET['semester']
+        year = request.GET['year']
+        module=Module.objects.filter(module_id=module_id,semester=semester,year=year)
+        professor=Professor.objects.filter(professor_id=professor_id)
+        Rating.objects.create(module=module[0],professor=professor[0],rating=rating)
+        return HttpResponse('rate success')
