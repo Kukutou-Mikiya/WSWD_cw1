@@ -34,3 +34,9 @@ elif input1[0]== 'register':
         password=input('please input password:')
         params['password']=password
         response = requests.get("http://127.0.0.1:8000/register", params = params)
+elif input1[0]== 'login':
+        username=input('please input username:')
+        params={'username':username}
+        password=input('please input password:')
+        params['password']=password
+        response = requests.get("http://127.0.0.1:8000/login", params = params)

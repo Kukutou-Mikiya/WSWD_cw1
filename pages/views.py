@@ -8,12 +8,22 @@ from rest_framework.response import Response
 from .serializers import ModuleSerializer,ProfessorSerializer
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def Register(request):
         username=request.GET['username']
         email=request.GET['email']
         password=request.GET['password']
         user=User.objects.create_user(username=username,email=email,password=password)
+
+def Login(request):
+        username=request.GET['username']
+        password=request.GET['password']
+        user = auth.authenticate(username=username,password=password)
+        if user:
+                auth.login(request,user)
+        else:
+                pass
 
 def GetModule(request):
         return HttpResponse("hello hello")
@@ -23,7 +33,9 @@ class HomePageView(ListView):
         template_name = 'home.html'
         context_object_name = 'all_module_list'
 
+
 class ModuleList(APIView):
+        @login_required
         def get(self,request):
                 module1=Module.objects.all()
                 serializer= ModuleSerializer(module1,many=True)
