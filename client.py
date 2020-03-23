@@ -3,13 +3,14 @@ import requests
 #from pages import serializers
 login=False
 s=requests.Session()
+url='http://127.0.0.1:8000'
 while(True):
         input1=input('please input your command:')
         input1=input1.split()
         if len(input1)<1:
                 print('you can choice the command from: list, view, average, rate, register, login, logout')                
         if input1[0]== 'list':
-                response = requests.get("http://127.0.0.1:8000/module")
+                response = requests.get("%s/module"%(url))
                 #serializer = serializer.ModuleSerializer(response.text)
                 #print(response.text)
                 data=response.json()
@@ -25,7 +26,7 @@ while(True):
         #headers={'professor_id':input[1]}
         #headers['module_id']=input[2]
         #response = requests.get("http://127.0.0.1:8000/view", params = headers)
-                response = requests.get("http://127.0.0.1:8000/view")
+                response = requests.get("%s/view"%(url))
                 data=response.json()
                 for professor in data:
                         print('The rating of Professor %s (%s) is %d.'%(professor['name'],professor['id'],professor['rating']))
@@ -34,7 +35,7 @@ while(True):
                 if len(input1)==3:
                         headers={'professor_id':input1[1]}
                         headers['module_id']=input1[2]        
-                        response = requests.get("http://127.0.0.1:8000/average", params = headers)
+                        response = requests.get("%s/average"%(url), params = headers)
                         if response.text=='not found':
                                 print("found no record with given professor id and module code,the professor may not teach this module")
                         elif response.text=='no rating':
@@ -54,7 +55,7 @@ while(True):
                         params['semester']=input1[4]
                         params['rating']=input1[5]
                         if login==True:
-                                response = s.get("http://127.0.0.1:8000/rate", params = params)
+                                response = s.get("%s/rate"%(url), params = params)
                                 if response.text=='rate success':
                                         print('rate successfully')
                                 else:
@@ -70,24 +71,28 @@ while(True):
                 params['email']=email
                 password=input('please input password:')
                 params['password']=password
-                response = requests.get("http://127.0.0.1:8000/register", params = params)
+                response = requests.get("%s/register"%(url), params = params)
                 if response.text=='success register':
                         print('register successfully')
                 else:
                         print('register failed,user with given username already existed')
         elif input1[0]== 'login':
+                if len(input1)!=2:
+                        print('you need to declare in following form:login url')
+                        continue
+                url=input1[1]                
                 username=input('please input username:')
                 params={'username':username}
                 password=input('please input password:')
                 params['password']=password
-                response = s.get("http://127.0.0.1:8000/login", params = params)
+                response = s.get("%s/login"%(url), params = params)
                 if response.text=='success login':
                         login=True
                         print('login successfully')
                 else:
                         print('login failed,you may check your username or password')
         elif input1[0]== 'logout':
-                response = s.get("http://127.0.0.1:8000/logout")
+                response = s.get("%s/logout"%(url))
                 if response.text=='logout':
                         print('logout successfully')
                         login=False
