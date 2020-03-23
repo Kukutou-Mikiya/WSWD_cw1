@@ -30,18 +30,18 @@ def Logout(request):
         auth.logout(request)
 
 def GetModule(request):
-        return HttpResponse("hello hello")
+        return HttpResponse("hello world")
 
 class HomePageView(ListView):
         model = Module
         template_name = 'home.html'
         context_object_name = 'all_module_list'
 
-
 class ModuleList(APIView):
         def get(self,request):
                 module1=Module.objects.all()
                 serializer= ModuleSerializer(module1,many=True)
+                print(serializer.data)
                 return Response(serializer.data)
 
         def post(self):
