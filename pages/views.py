@@ -13,9 +13,13 @@ from decimal import *
 # Create your views here.
 def Register(request):
         username=request.GET['username']
+        check=User.objects.filter(username=username)
+        if check.count()!=0:
+                return HttpResponse('failed register')
         email=request.GET['email']
         password=request.GET['password']
         user=User.objects.create_user(username=username,email=email,password=password)
+        return HttpResponse('success register')
 
 def Login(request):
         username=request.GET['username']
@@ -29,6 +33,7 @@ def Login(request):
 
 def Logout(request):
         auth.logout(request)
+        return HttpResponse('logout')
 
 def GetModule(request):
         return HttpResponse("hello world")
@@ -84,7 +89,11 @@ class AverageRating(APIView):
                 module_id=a['module_id']
                 professor=Professor.objects.filter(professor_id=professor_id)
                 module=Module.objects.filter(module_id=module_id)
+                if module.count()==0 or professor.count()==0:
+                        return HttpResponse('not found')
                 moduleInstances=ModuleInstance.objects.filter(module=module[0])
+                if moduleInstances.count()==0:
+                        return HttpResponse('not found')
                 sum=0.0
                 count=0
                 average=0
@@ -94,6 +103,8 @@ class AverageRating(APIView):
                                 for rate in rates:
                                         sum+=rate.rating
                                 count+=rates.count()
+                if count==0:
+                        return HttpResponse('no rating')
                 average=sum/count
                 average=Decimal(average).quantize(Decimal('1.'), rounding=ROUND_HALF_UP)                
                 data = {'rating':average}
@@ -142,7 +153,11 @@ def RateProfessor(request):
         semester = request.GET['semester']
         year = request.GET['year']
         module=Module.objects.filter(module_id=module_id)
+        if module.count()==0:
+                return HttpResponse('rate failed')
         moduleInstance=ModuleInstance.objects.filter(module=module[0],year=year,semester=semester)
         professor=Professor.objects.filter(professor_id=professor_id)
+        if moduleInstance.count()==0 or professor.count()==0:
+                return HttpResponse('rate failed')
         Rating.objects.create(moduleInstance=moduleInstance[0],professor=professor[0],rating=rating)
         return HttpResponse('rate success')

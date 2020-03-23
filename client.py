@@ -35,8 +35,14 @@ while(True):
                         headers={'professor_id':input1[1]}
                         headers['module_id']=input1[2]        
                         response = requests.get("http://127.0.0.1:8000/average", params = headers)
-                        data=response.json()
-                        print('The rating of Professor %s (%s) in module %s (%s) is %d.'%(data['professor_name'],input1[1],data['module_name'],input1[2],data['rating']))
+                        if response.text=='not found':
+                                print("found no record with given professor id and module code,the professor may not teach this module")
+                        elif response.text=='no rating':
+                                print("the professor have not receive rating on this module yet")
+                        else:
+                                data=response.json()
+                                print('The rating of Professor %s (%s) in module %s (%s) is %d.'%(data['professor_name'],input1[1],data['module_name'],input1[2],data['rating']))
+                                
                 else:
                         print('you need to declare in following form: average professor_id module_code')
         elif input1[0]== 'rate':
@@ -51,6 +57,8 @@ while(True):
                                 response = s.get("http://127.0.0.1:8000/rate", params = params)
                                 if response.text=='rate success':
                                         print('rate successfully')
+                                else:
+                                        print('rate failed,you may provide wrong info about the professor or the module instance.')
                         else:
                                 print('you have to login before rating')
                 else:
@@ -63,6 +71,10 @@ while(True):
                 password=input('please input password:')
                 params['password']=password
                 response = requests.get("http://127.0.0.1:8000/register", params = params)
+                if response.text=='success register':
+                        print('register successfully')
+                else:
+                        print('register failed,user with given username already existed')
         elif input1[0]== 'login':
                 username=input('please input username:')
                 params={'username':username}
@@ -76,6 +88,8 @@ while(True):
                         print('login failed,you may check your username or password')
         elif input1[0]== 'logout':
                 response = s.get("http://127.0.0.1:8000/logout")
-                login=False
+                if response.text=='logout':
+                        print('logout successfully')
+                        login=False
         else:
                 print('you can choice the command from: list, view, average, rate, register, login, logout')
