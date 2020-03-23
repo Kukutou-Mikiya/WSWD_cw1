@@ -28,7 +28,7 @@ class ModuleInstance(models.Model):
 
 class Rating(models.Model):
         professor = models.ForeignKey(Professor,on_delete=models.CASCADE)
-        moduleInstance = models.ForeignKey('ModuleInstance',on_delete=models.CASCADE)
+        module = models.ForeignKey(ModuleInstance,on_delete=models.CASCADE)
         rating = models.IntegerField()
 '''
 class CustomUser(AbstractUser):

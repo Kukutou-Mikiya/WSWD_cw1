@@ -15,11 +15,14 @@ class ProfessorSerializer(serializers.Serializer):
 class ModuleSerializer(serializers.Serializer):
         module_id = serializers.CharField(max_length=6)
         name = serializers.CharField(max_length=30)
-    
-
-class ModuleInstanceSerializer(serializers.Serializer):
-        module = ModuleSerializer()
         year = serializers.IntegerField()
         semester = serializers.IntegerField()
         professor = ProfessorSerializer(many=True)      
-
+'''
+class ModuleInstanceSerializer(serializers.Serializer):
+        module_id = serializers.CharField(max_length=6)
+        name = serializers.CharField(max_length=30)
+        year = serializers.IntegerField()
+        semester = serializers.IntegerField()
+        professor = ProfessorSerializer(many=True)      
+'''
