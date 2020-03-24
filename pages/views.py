@@ -106,7 +106,16 @@ class AverageRating(APIView):
                 if count==0:
                         return HttpResponse('no rating')
                 average=sum/count
-                average=Decimal(average).quantize(Decimal('1.'), rounding=ROUND_HALF_UP)                
+                average=Decimal(average).quantize(Decimal('1.'), rounding=ROUND_HALF_UP)
+                '''
+                print('bbbbbb!\n')
+                print(Decimal(2.5).quantize(Decimal('1.'), rounding=ROUND_HALF_UP))
+                print(Decimal(2.4999999).quantize(Decimal('1.'), rounding=ROUND_HALF_UP))
+                print(round(2.5))
+                print(round(2.49))
+                print(round(2.51))
+                print('aaaaaaaaaaaaaa!\n')
+                '''                
                 data = {'rating':average}
                 data['professor_name']=professor[0].name
                 data['module_name']=module[0].name
